@@ -1,38 +1,159 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+text-align: center;
+height: 150px;
+padding: 20px;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.ideatile {
+  height: 300px;
+  width: 300px;
+  margin: 10px;
+  background:white;
+  float: left;
+  font-size: 15px;
+  font-family: Poiret One;
+  text-align: left;
+  border: 3px solid burlywood;
+
+  padding: 30px;
+  
+
+  
+}
+
+.newIdeaButton {
+  background: rosybrown;
+  color: white;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-left: 10px;
+  padding:10px;
+}
+
+.movetile {
   display: flex;
-  flex-direction: column;
+  float: left;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  position: relative;
+  margin: 40px auto;
+  width: 250px;
+  height: 250px;
+  background: white;
+  margin-right: 30px;
+  opacity: 0.5;
+  border-radius: 75px;
+  font-size: 15px;
+  font-weight: bolder ;
+  letter-spacing: 2px;
+  transition: 1s box-shadow;
+  padding: 10px;
 }
 
-.App-link {
-  color: #61dafb;
+.ideamovetile:hover {
+  box-shadow: 0 40px 35px 0px rgba(0,0,0,.1);
+  
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.ideamovetile:hover:before, .ideamovetile:hover:after {
+  display: block;
+  content: '';
+  position: absolute;
+  width: 550px;
+  height: 250px;
+ 
+  border-radius: 75px;
+  z-index: -1;
+  animation: 1s clockwise infinite;
+  /* box-shadow: 0 5px 35px 0px rgba(0,0,0,.1); */
 }
+
+.ideamovetile:hover:after {
+  /* background:url('http://cdn.lowgif.com/small/2bc2ef70c59b1667-our-wheels-are-turning-the-opposite-of-people-a-new-theater-company.gif'); */
+  /* animation: 2s counterclockwise infinite; */
+}
+
+
+.input {
+  border: 0;
+  background: none;
+  outline: none;
+  margin-top:10px;
+  width: 140px;
+  font-size: 11px;
+}
+
+.input:focus {
+  border: solid 1px lightgrey;
+}
+
+textarea {
+  resize: none;
+  height: 90px;
+  font-size: 11px;
+}
+
+.deleteButton {
+  visibility: hidden;
+  float: right;
+  margin: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  color: red;
+}
+
+.ideatile:hover .deleteButton {
+  visibility: visible;
+}
+
+.todoimg {
+  height:700px;
+  width: 800px;
+  float: left;
+  transform: translate(10px,-100px);
+  
+}
+
+.welcome {
+  float: right;
+  font-size: 74px;
+  font-family: poiret one;
+  transform: translate(-250px,-90px);
+}
+
+.welcometext {
+  float: right;
+  font-size: 20px;
+  transform: translate(-30px,-550px);
+
+}
+
+
+.ideaboard {
+  transform: translate(-40px, 290px);
+}
+
+.signup-message {
+  transform: translate(-50px, 300px);
+  
+}
+
+.login {
+  transform: translate(110px, 275px);
+
+}
+
+/* p.login{
+float:right;
+} */
+/* 
+p.signup-message{
+  width:100%;
+} */
+

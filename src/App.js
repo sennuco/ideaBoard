@@ -1,25 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import IdeasContainer from './Components/IdeasContainer'
+import {Route ,Switch} from 'react-router'
+import {Link} from 'react-router-dom'
+import Home from './Components/Home'
+import Login from './Components/Login'
+import "bulma/css/bulma.css";
+
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div>
+      <nav className="navbar">
+       <div className="navbar-item">
+        <div className="field is-grouped">
+          <p className="control">
+            <a className="button">
+                <span className="icon">
+                  <i className="fas fa-twitter" aria-hidden="true"></i>
+                </span>
+                <span > <Link to="/">Home</Link></span>
+            </a>
+          </p>
+     </div>
+</div>
+      </nav>
+    
+        <Route path="/ideas" component={IdeasContainer} />
+        <Route path="/login" component={Login} />
+        <Route path ="/" exact strict component={Home} />
+      </div>
   );
 }
 
