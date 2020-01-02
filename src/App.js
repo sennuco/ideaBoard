@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react'
 import './App.css';
 import IdeasContainer from './Components/IdeasContainer'
 import {Route ,Switch} from 'react-router'
@@ -9,7 +9,35 @@ import "bulma/css/bulma.css";
 
 
 
-function App() {
+class  App extends Component {
+   constructor(props) {
+     super(props)
+   
+     this.state = {
+        user: {}
+     };
+   };
+
+
+componentDidMount() {
+  //this.getNewUser()
+}
+
+
+getNewUser = (email) => {
+  console.log('email',email)
+  fetch(`http://localhost:3001/users?email=${email}`)
+  .then(resp => resp.json())
+  .then(user_obj => {
+    console.log('usssr',user_obj)
+    this.setState({user: user_obj})
+  }
+    )
+}
+
+
+render() {
+
   return (
     <div>
       <nav className="navbar">
@@ -21,17 +49,19 @@ function App() {
                   <i className="fas fa-twitter" aria-hidden="true"></i>
                 </span>
                 <span > <Link to="/">Home</Link></span>
+              
             </a>
           </p>
      </div>
-</div>
+    </div>
       </nav>
     
         <Route path="/ideas" component={IdeasContainer} />
-        <Route path="/login" component={Login} />
+        <Route path="/login" render={(props) => <Login getNewUser={this.getNewUser} />  } />
         <Route path ="/" exact strict component={Home} />
-      </div>
-  );
+   </div>
+  )
+  }
 }
 
 export default App;

@@ -8,7 +8,10 @@ class IdeasContainer extends Component {
         ideas: [],
         editingIdeaId: null,
         notification: '',
-        category: []
+        category: [],
+        sortedDesc: true,
+        filterIdeas: true,
+        filteredIdeas: [],
     }
 
     async componentDidMount(){
@@ -17,13 +20,13 @@ class IdeasContainer extends Component {
 
             const catResponse = await fetch(`http://localhost:3001/categories`)
             const categoryObj = await catResponse.json()
-            console.log(categoryObj)
+            // console.log(categoryObj)
 
 
             const ideaResponse = await fetch(`http://localhost:3001/ideas`)
             const ideaArray  = await ideaResponse.json()
             const updatedIdeaArray = ideaArray.map((idea) => {
-            //  console.log(categoryObj[idea.category_id -1].urgent)
+     
              return Object.assign({}, idea, {'category' : categoryObj[idea.category_id -1].urgent})
             }
             )
@@ -44,6 +47,9 @@ class IdeasContainer extends Component {
     }
 
 
+
+
+
    addNewIdea = () => {
     
     fetch(`http://localhost:3001/ideas`, {
@@ -53,16 +59,22 @@ class IdeasContainer extends Component {
          'accept': 'application/json'
      },
      body: JSON.stringify({
-     idea: {title: '', body: '', user_id:1 ,category_id: 1}
+     idea: {title: 'default', body: 'default', user_id:1 ,category_id: 1}
       })
     })
     .then(resp => resp.json())
-    .then(response => console.log(response)
-     )
+    .then(response => {
+        console.log('ress',response);
+        let updatedIdeaObj = Object.assign({}, response, {'category' : this.state.category[response.category_id -1].urgent})
 
+        const ideas = update(this.state.ideas, {
+            $splice: [[0, 0, updatedIdeaObj]]
+          })
+        console.log('ideas', ideas)
+          this.setState({ideas: ideas})
 
-
-    }
+    })
+}
 
 
     updateIdea = (idea) => {
@@ -75,15 +87,22 @@ class IdeasContainer extends Component {
     
     }
 
+
+
+
     resetNotification = () => {
         this.setState({notification: ''})
     }
+
 
 
     enableEditing = (id) => {
         
         this.setState({editingIdeaId: id}, () => { this.title.focus() })
     }
+
+
+
 
     deleteIdea = (id) => {
       fetch(`http://localhost:3001/ideas/${id}`, {
@@ -99,38 +118,75 @@ class IdeasContainer extends Component {
     }
     
 
+    sortIdea = () => {
 
+        this.setState({sortedDesc: !this.state.sortedDesc})
+         let sortedIdeas = []
+        if(this.state.sortedDesc !== true)
+            sortedIdeas = this.state.ideas.sort((idea1, idea2) => idea2.category_id - idea1.category_id)
+        else
+            sortedIdeas = this.state.ideas.sort((idea1, idea2) => idea1.category_id - idea2.category_id)
+
+      this.setState({
+          ideas: sortedIdeas
+      })
+     
+    }
+
+    filterIdea = () => {
+        //toggle the filter button (the state has the value)
+        this.setState({filterIdeas: !this.state.filterIdeas})
+
+        //Only get the idea if it's category_id is 2
+        let filteredIdeas = this.state.ideas.filter(idea => idea.category_id === 2)
+        
+        //add the new filtered ideas to the state
+        this.setState({filteredIdeas: filteredIdeas})
+    }
+
+ 
+
+    
 
 
     render() {
-    //  console.log(this.state.category)
      
         return (
             <div>
+                <div>
                 <button className="newIdeaButton" onClick={this.addNewIdea}>
                     New Idea
                 </button> 
+
+                <button className="filterIdeas button is-info" onClick={this.filterIdea}>
+                Toggle Filter
+                </button>
+
+                <button className="button is-primary" onClick={this.sortIdea}>
+                Toggle Sort
+                </button>
+
+                </div>
                 <span className="notification">
                 {this.state.notification}
                 </span>
                             
-                {this.state.ideas.map((idea) => {
+                {this.state.filterIdeas ? this.state.ideas.map((idea) => {
                     if (this.state.editingIdeaId === idea.id){
-                  return (<IdeaForm idea={idea} key={idea.id} updateIdea={this.updateIdea} resetNotification={this.resetNotification}  titleRef= {input => this.title = input} category={this.state.category} />
+                        // console.log('editingIdeaId:',this.state.editingIdeaId);
+                        return (<IdeaForm idea={idea} key={idea.id} updateIdea={this.updateIdea} resetNotification={this.resetNotification}  titleRef= {input => this.title = input} category={this.state.category} />
+                  )} else{
+                      return (<Idea idea={idea} key={idea.id} onClick={this.enableEditing}  onDelete={this.deleteIdea}   />)
+                  }
+                }) : this.state.filteredIdeas.map((idea) => {
+                    if (this.state.editingIdeaId === idea.id){
+                        return (<IdeaForm idea={idea} key={idea.id} updateIdea={this.updateIdea} resetNotification={this.resetNotification}  titleRef= {input => this.title = input} category={this.state.category} />
                   )} else{
                       return (<Idea idea={idea} key={idea.id} onClick={this.enableEditing}  onDelete={this.deleteIdea}   />)
                   }
                 })
         
                 }
-
-            
-                
-                
-                
-            
-                
-                
 
             </div>
          

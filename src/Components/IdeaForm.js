@@ -31,7 +31,7 @@ export default class componentName extends Component {
     handleBlur = () => {
       console.log('state cat', this.state.category)
       console.log('catID',this.props.category)//.indexOf(this.stage.category))
-      console.log('cats',this.props.category.find(cat => cat.urgent === this.state.category).id)
+//      console.log('cats',this.props.category.find(cat => cat.urgent === this.state.category).id)
       // console.log('catID',this.props.category)//.indexOf(this.stage.category))
       // console.log('state cat', this.state.category)
         const idea = {
@@ -91,16 +91,13 @@ export default class componentName extends Component {
             <input className="input" type="text" name="title" placeholder="Enter a title.." value={this.state.title} onChange={this.handleInput} ref={this.props.titleRef}></input>
             <textarea className="input" type="text" name="body" placeholder="Decribe your idea.." value={this.state.body} onChange={this.handleInput} ></textarea>
         
-        <label>
-         Urgent:
-         <input type="checkbox" name="category" value={this.state.category} onClick={this.handleCheck} defaultChecked={this.state.category === true ? true : false}></input>
-         </label>
-
-            
+            <label>
+              Urgent:<input type="checkbox" name="category" value={this.state.category} onClick={this.handleCheck} defaultChecked={this.state.category === true ? true : false}></input>
+            </label>
+              
         </form>
 
-
     </div>
-    );
+    )
   }
 }
