@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './App.css';
 import IdeasContainer from './Components/IdeasContainer'
-import {Route ,Switch} from 'react-router'
+import {Route ,Switch, withRouter} from 'react-router'
 import {Link} from 'react-router-dom'
 import Home from './Components/Home'
 import Login from './Components/Login'
@@ -18,19 +18,14 @@ class  App extends Component {
      };
    };
 
-
-componentDidMount() {
-  //this.getNewUser()
-}
-
-
 getNewUser = (email) => {
   console.log('email',email)
   fetch(`http://localhost:3001/users?email=${email}`)
   .then(resp => resp.json())
   .then(user_obj => {
     console.log('usssr',user_obj)
-    this.setState({user: user_obj})
+    this.setState({user: user_obj[0]})
+    this.props.history.push("/ideas")
   }
     )
 }
@@ -55,8 +50,8 @@ render() {
      </div>
     </div>
       </nav>
-    
-        <Route path="/ideas" component={IdeasContainer} />
+
+      <Route path="/ideas" render={(props) => <IdeasContainer user={this.state.user} />  } />
         <Route path="/login" render={(props) => <Login getNewUser={this.getNewUser} />  } />
         <Route path ="/" exact strict component={Home} />
    </div>
@@ -64,4 +59,4 @@ render() {
   }
 }
 
-export default App;
+export default withRouter(App);

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Idea from './Idea.js'
 import update from 'immutability-helper'
 import IdeaForm from './IdeaForm'
+import {Link} from 'react-router-dom'
+//import Login from './Components/Login'
 
 class IdeasContainer extends Component {
     state={
@@ -12,6 +14,7 @@ class IdeasContainer extends Component {
         sortedDesc: true,
         filterIdeas: true,
         filteredIdeas: [],
+        user: this.props.user
     }
 
     async componentDidMount(){
@@ -145,12 +148,36 @@ class IdeasContainer extends Component {
     }
 
  
+    renderIdeas(){
+        return(
+            <div>
 
+                {this.state.filterIdeas ? this.state.ideas.map((idea) => {
+                    if (this.state.editingIdeaId === idea.id){
+                        // console.log('editingIdeaId:',this.state.editingIdeaId);
+                        return (<IdeaForm idea={idea} key={idea.id} updateIdea={this.updateIdea} resetNotification={this.resetNotification}  titleRef= {input => this.title = input} category={this.state.category} />
+                  )} else{
+                      return (<Idea idea={idea} key={idea.id} onClick={this.enableEditing}  onDelete={this.deleteIdea}   />)
+                  }
+                }) : this.state.filteredIdeas.map((idea) => {
+                    if (this.state.editingIdeaId === idea.id){
+                        return (<IdeaForm idea={idea} key={idea.id} updateIdea={this.updateIdea} resetNotification={this.resetNotification}  titleRef= {input => this.title = input} category={this.state.category} />
+                  )} else{
+                      return (<Idea idea={idea} key={idea.id} onClick={this.enableEditing}  onDelete={this.deleteIdea}   />)
+                  }
+                })
+        
+                }
+
+            </div>
+        )
+    }
     
 
 
     render() {
-     
+        console.log('user idea',this.state.user);
+        
         return (
             <div>
                 <div>
@@ -170,23 +197,10 @@ class IdeasContainer extends Component {
                 <span className="notification">
                 {this.state.notification}
                 </span>
-                            
-                {this.state.filterIdeas ? this.state.ideas.map((idea) => {
-                    if (this.state.editingIdeaId === idea.id){
-                        // console.log('editingIdeaId:',this.state.editingIdeaId);
-                        return (<IdeaForm idea={idea} key={idea.id} updateIdea={this.updateIdea} resetNotification={this.resetNotification}  titleRef= {input => this.title = input} category={this.state.category} />
-                  )} else{
-                      return (<Idea idea={idea} key={idea.id} onClick={this.enableEditing}  onDelete={this.deleteIdea}   />)
-                  }
-                }) : this.state.filteredIdeas.map((idea) => {
-                    if (this.state.editingIdeaId === idea.id){
-                        return (<IdeaForm idea={idea} key={idea.id} updateIdea={this.updateIdea} resetNotification={this.resetNotification}  titleRef= {input => this.title = input} category={this.state.category} />
-                  )} else{
-                      return (<Idea idea={idea} key={idea.id} onClick={this.enableEditing}  onDelete={this.deleteIdea}   />)
-                  }
-                })
-        
-                }
+                
+                
+                {Object.keys(this.state.user).length !== 0
+                    ? this.renderIdeas() : <Link to='/login'>'Yall need to sign in'</Link>}
 
             </div>
          

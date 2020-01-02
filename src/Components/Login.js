@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component , } from 'react';
+// import { browserHistory } from 'react-router'
+
 
 class Login extends Component {
 
@@ -11,7 +13,10 @@ class Login extends Component {
    }
 
    handleSubmit =() => {
+
      this.props.getNewUser(this.state.email)
+
+     
    }
 
    handleChange =(e) => {
