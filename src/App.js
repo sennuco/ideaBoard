@@ -19,11 +19,11 @@ class  App extends Component {
    };
 
 getNewUser = (email) => {
-  console.log('email',email)
+  // console.log('email',email)
   fetch(`http://localhost:3001/users?email=${email}`)
   .then(resp => resp.json())
   .then(user_obj => {
-    console.log('usssr',user_obj)
+    // console.log('usssr',user_obj)
     this.setState({user: user_obj[0]})
     this.props.history.push("/ideas")
   }
@@ -51,7 +51,7 @@ render() {
     </div>
       </nav>
 
-      <Route path="/ideas" render={(props) => <IdeasContainer user={this.state.user} />  } />
+        <Route path="/ideas" render={(props) => <IdeasContainer user={this.state.user} />  } />
         <Route path="/login" render={(props) => <Login getNewUser={this.getNewUser} />  } />
         <Route path ="/" exact strict component={Home} />
    </div>

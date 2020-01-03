@@ -14,7 +14,12 @@ class IdeasContainer extends Component {
         sortedDesc: true,
         filterIdeas: true,
         filteredIdeas: [],
-        user: this.props.user
+        user: this.props.user,
+        filteringIdeas: "",
+        filteringIdeasMatch: false,
+        newFilteredSearch: []
+
+
     }
 
     async componentDidMount(){
@@ -67,13 +72,13 @@ class IdeasContainer extends Component {
     })
     .then(resp => resp.json())
     .then(response => {
-        console.log('ress',response);
+        // console.log('ress',response);
         let updatedIdeaObj = Object.assign({}, response, {'category' : this.state.category[response.category_id -1].urgent})
 
         const ideas = update(this.state.ideas, {
             $splice: [[0, 0, updatedIdeaObj]]
           })
-        console.log('ideas', ideas)
+        // console.log('ideas', ideas)
           this.setState({ideas: ideas})
 
     })
@@ -91,12 +96,9 @@ class IdeasContainer extends Component {
     }
 
 
-
-
     resetNotification = () => {
         this.setState({notification: ''})
     }
-
 
 
     enableEditing = (id) => {
@@ -147,26 +149,57 @@ class IdeasContainer extends Component {
         this.setState({filteredIdeas: filteredIdeas})
     }
 
+    handleFilteredIdeas = (e) => {
+
+      this.setState({
+        [e.target.name]: e.target.value
+      })
+
+      const newFilteredIdeas = this.state.ideas.filter(idea => idea.title.toLowerCase().includes(this.state.filteringIdeas.toLowerCase()))
+     
+      if(newFilteredIdeas.length > 0){
+        this.setState({
+            filteringIdeasMatch: true
+        })
+      }else {
+        this.setState({
+            filteringIdeasMatch: false
+        })
+      }
+
+      this.setState({
+        newFilteredSearch: newFilteredIdeas 
+     })
+     
+     console.log(this.state.newFilteredSearch)
+     
+
+    }
+    
+
+
  
     renderIdeas(){
+     
+        
         return(
             <div>
 
-                {this.state.filterIdeas ? this.state.ideas.map((idea) => {
+                {this.state.filteringIdeasMatch ? this.state.newFilteredSearch.map((idea) => {
                     if (this.state.editingIdeaId === idea.id){
                         // console.log('editingIdeaId:',this.state.editingIdeaId);
                         return (<IdeaForm idea={idea} key={idea.id} updateIdea={this.updateIdea} resetNotification={this.resetNotification}  titleRef= {input => this.title = input} category={this.state.category} />
                   )} else{
                       return (<Idea idea={idea} key={idea.id} onClick={this.enableEditing}  onDelete={this.deleteIdea}   />)
                   }
-                }) : this.state.filteredIdeas.map((idea) => {
+                }) : this.state.ideas.map((idea) => {
                     if (this.state.editingIdeaId === idea.id){
                         return (<IdeaForm idea={idea} key={idea.id} updateIdea={this.updateIdea} resetNotification={this.resetNotification}  titleRef= {input => this.title = input} category={this.state.category} />
                   )} else{
                       return (<Idea idea={idea} key={idea.id} onClick={this.enableEditing}  onDelete={this.deleteIdea}   />)
                   }
                 })
-        
+                
                 }
 
             </div>
@@ -176,22 +209,27 @@ class IdeasContainer extends Component {
 
 
     render() {
-        console.log('user idea',this.state.user);
+        // console.log('user idea',this.state.user);
         
         return (
             <div>
+                <h1>Welcome {this.state.user.name}</h1>
                 <div>
                 <button className="newIdeaButton" onClick={this.addNewIdea}>
                     New Idea
                 </button> 
 
-                <button className="filterIdeas button is-info" onClick={this.filterIdea}>
+                {/* <button className="filterIdeas button is-info" onClick={this.filterIdea}>
                 Toggle Filter
-                </button>
+                </button> */}
 
                 <button className="button is-primary" onClick={this.sortIdea}>
                 Toggle Sort
                 </button>
+
+                Filter Box:
+              
+                <textarea name="filteringIdeas" onChange={this.handleFilteredIdeas} value={this.state.filteringIdeas}>test</textarea>
 
                 </div>
                 <span className="notification">
@@ -200,7 +238,7 @@ class IdeasContainer extends Component {
                 
                 
                 {Object.keys(this.state.user).length !== 0
-                    ? this.renderIdeas() : <Link to='/login'>'Yall need to sign in'</Link>}
+                    ? this.renderIdeas() : <Link to='/login'>'Please Sign-In'</Link>}
 
             </div>
          

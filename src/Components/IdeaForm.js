@@ -7,7 +7,8 @@ export default class componentName extends Component {
       this.state = {
          title: this.props.idea.title,
          body: this.props.idea.body,
-         category: this.props.idea.category
+         category: this.props.idea.category,
+
          
       };
     };
@@ -29,8 +30,8 @@ export default class componentName extends Component {
     
 
     handleBlur = () => {
-      console.log('state cat', this.state.category)
-      console.log('catID',this.props.category)//.indexOf(this.stage.category))
+      // console.log('state cat', this.state.category)
+      // console.log('catID',this.props.category)//.indexOf(this.stage.category))
 //      console.log('cats',this.props.category.find(cat => cat.urgent === this.state.category).id)
       // console.log('catID',this.props.category)//.indexOf(this.stage.category))
       // console.log('state cat', this.state.category)
@@ -66,7 +67,7 @@ export default class componentName extends Component {
 
 
     handleCheck=(e) => {
-      console.log('Before set state line: 89',this.state.category)
+      // console.log('Before set state line: 89',this.state.category)
      
       this.setState({
         category: !this.state.category
@@ -94,6 +95,8 @@ export default class componentName extends Component {
             <label>
               Urgent:<input type="checkbox" name="category" value={this.state.category} onClick={this.handleCheck} defaultChecked={this.state.category === true ? true : false}></input>
             </label>
+
+            
               
         </form>
 
